@@ -82,6 +82,23 @@ body {
     color: var(--bgColor);
 }
 
+.popout {
+    animation: popout 3s ease;
+    -webkit-animation: popout 3s ease;
+}
+
+@keyframes popout {
+    30%{transform:scale(1)}
+    50%{transform:scale(1.2)}
+    to{transform:scale(1)}
+}
+
+@-webkit-keyframes popout {
+    30%{transform:scale(1)}
+    50%{transform:scale(1.2)}
+    to{transform:scale(1)}
+}
+
 #hashtag {
     position: relative;
     padding-bottom: 20px;

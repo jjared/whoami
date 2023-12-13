@@ -58,6 +58,12 @@
         <i class="fa-solid fa-chess-board">&nbsp;</i>Drag Race Bingo
       </a>
     </div>
-
+    <script>
+      var popout = Number(location.hash.substr(1));
+      var links = document.getElementsByClassName("link");
+      if (!isNaN(popout) && popout > 0 && popout <= links.length) {
+        links[popout-1].classList.add("popout");
+      }
+    </script>
   </body>
 </html>
