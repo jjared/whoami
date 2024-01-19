@@ -59,7 +59,7 @@
       </a>
     </div>
     <script>
-      var popout = Number(location.hash.substr(1));
+      var popout = Number(location.pathname.split('/')[1]);
       var links = document.getElementsByClassName("link");
       if (!isNaN(popout) && popout > 0 && popout <= links.length) {
         links[popout-1].classList.add("popout");
