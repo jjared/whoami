@@ -94,6 +94,12 @@
         document.getElementById("links").append(linkEl);
       });
 
+      if (popout != NaN && popout > 0 && popout < links.length + 1) {
+        setTimeout(() => {
+          window.location.replace(links[popout - 1]["url"]);
+        }, 3000)
+      }
+
     </script>
   </body>
 </html>
