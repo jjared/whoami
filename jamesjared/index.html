@@ -36,78 +36,65 @@
     </div>
 
     <script>
-      var links = [
-        {
-          "key":"odcshow",
+      var links = {
+        "odcshow": {
           "title":"ODC Community Showcase: 6/8 7:30pm, 6/9 5:30pm & 7:30pm",
           "url":"https://odcsf.my.salesforce-sites.com/ticket/#/events/a0SVM000000Cvyb2AC",
           "icon":"fa-solid fa-ticket"
         },
-        {
-          "key": "heelz101",
+        "heelz101": {
           "title":"Heelz 101 Signup: 6/15 12:30-2pm",
           "url":"https://forms.gle/9hrRsfjRzrKrjY1UA",
           "icon":"fa-solid fa-file-signature"
         },
-        {
-          "key": "mondayclass",
+        "mondayclass": {
           "title": "Monday Int/Adv Heels Signup: 6:30pm @City Dance",
           "url": "https://app.squarespacescheduling.com/schedule.php?owner=22968233&appointmentType=46240908g",
           "icon": "fa-solid fa-file-signature"
         },
-        {
-          "key": "classvids",
+        "classvids": {
           "title": "Class Vids",
           "url": "https://drive.google.com/drive/folders/1L8BN6TwfZJnqCYBZRa2ICI5uJJj1lmcZ?usp=sharing",
           "icon": "fa-solid fa-video"
         },
-        {
-          "key": "choreoplaylist",
+        "choreoplaylist": {
           "title": "Choreo Playlist",
           "url": "https://open.spotify.com/playlist/5MfC4Ia0R0zRjMh4nEhX5W?si=1cc8329f599c4b0c",
           "icon": "fa-solid fa-music"
         },
-        {
-          "key": "instagram",
+        "instagram": {
           "title": "Instagram",
           "url": "https://www.instagram.com/jams_jard",
           "icon": "fab fa-instagram"
         },
-        {
-          "key": "twitter",
+        "twitter": {
           "title": "Twitter",
           "url": "https://twitter.com/jams_jard",
           "icon": "fab fa-twitter"
         },
-        {
-          "key": "tiktok",
+        "tiktok": {
           "title": "TikTok",
           "url": "https://www.tiktok.com/@jamsjard",
           "icon": "fab fa-tiktok"
         },
-        {
-          "key": "bingo",
+        "bingo": {
           "title": "Drag Race Bingo",
           "url": "http://jamesjared.com/bingo",
           "icon": "fa-solid fa-chess-board"
         }
-      ];
+      };
       
       var popout = location.pathname.split('/')[1];
       // var popout = location.hash.slice(1);
-      if (popout.match(/^\d+$/)) {
-        popout = Number(popout);
-      } else if (popout.match(/^\w+$/)) {
-        links.forEach((link, i) => {
-          if (link["key"] == popout) { popout = i+1; }
-        });
-      } else {
-        popout = NaN;
-      }
+      var redirect = '';
 
-      links.forEach((link, i) => {
+      for (var [key, link] of Object.entries(links)) {
         linkEl = document.createElement("a");
-        linkEl.className = i == popout-1 ? "link popout" : "link";
+        linkEl.className = "link";
+        if (popout == key) {
+          linkEl.className = "link popout";
+          redirect = link["url"]
+        }
         linkEl.setAttribute("href", link["url"]);
         linkEl.setAttribute("target", "_blank");
         iconEl = document.createElement("i");
@@ -116,12 +103,12 @@
         linkEl.append(iconEl);
         linkEl.append(link["title"])
         document.getElementById("links").append(linkEl);
-      });
+      };
 
-      if (!isNaN(popout) && popout > 0 && popout < links.length + 1) {
+      if (popout) {
         setTimeout(() => {
-          window.location.replace(links[popout - 1]["url"]);
-        }, 1500)
+          window.location.replace(redirect);
+        }, 1500);
       }
 
     </script>
