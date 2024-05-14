@@ -83,8 +83,8 @@ body {
 }
 
 .popout {
-    animation: popout 3s ease;
-    -webkit-animation: popout 3s ease;
+    animation: popout 2s ease;
+    -webkit-animation: popout 2s ease;
 }
 
 @keyframes popout {
