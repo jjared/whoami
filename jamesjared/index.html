@@ -38,48 +38,72 @@
     <script>
       var links = [
         {
-          "title": "Monday Class Signup: 6:30pm @City Dance",
+          "key":"odcshow",
+          "title":"ODC Community Showcase: 6/8 7:30pm, 6/9 5:30pm & 7:30pm",
+          "url":"https://odcsf.my.salesforce-sites.com/ticket/#/events/a0SVM000000Cvyb2AC",
+          "icon":"fa-solid fa-ticket"
+        },
+        {
+          "key": "heelz101",
+          "title":"Heelz 101 Signup: 6/15 12:30-2pm",
+          "url":"https://forms.gle/9hrRsfjRzrKrjY1UA",
+          "icon":"fa-solid fa-file-signature"
+        },
+        {
+          "key": "mondayclass",
+          "title": "Monday Int/Adv Heels Signup: 6:30pm @City Dance",
           "url": "https://app.squarespacescheduling.com/schedule.php?owner=22968233&appointmentType=46240908g",
           "icon": "fa-solid fa-file-signature"
         },
         {
-          "title":"Spring Workshop Signup: Tues 7:30pm @ODC",
-          "url":"https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-8&sTG=11&sView=day&sLoc=0&sTrn=100001628&date=03/26/24",
-          "icon":"fa-solid fa-file-signature"
-        },
-        {
+          "key": "classvids",
           "title": "Class Vids",
           "url": "https://drive.google.com/drive/folders/1L8BN6TwfZJnqCYBZRa2ICI5uJJj1lmcZ?usp=sharing",
           "icon": "fa-solid fa-video"
         },
         {
+          "key": "choreoplaylist",
           "title": "Choreo Playlist",
           "url": "https://open.spotify.com/playlist/5MfC4Ia0R0zRjMh4nEhX5W?si=1cc8329f599c4b0c",
           "icon": "fa-solid fa-music"
         },
         {
+          "key": "instagram",
           "title": "Instagram",
           "url": "https://www.instagram.com/jams_jard",
           "icon": "fab fa-instagram"
         },
         {
+          "key": "twitter",
           "title": "Twitter",
           "url": "https://twitter.com/jams_jard",
           "icon": "fab fa-twitter"
         },
         {
+          "key": "tiktok",
           "title": "TikTok",
           "url": "https://www.tiktok.com/@jamsjard",
           "icon": "fab fa-tiktok"
         },
         {
+          "key": "bingo",
           "title": "Drag Race Bingo",
           "url": "http://jamesjared.com/bingo",
           "icon": "fa-solid fa-chess-board"
         }
       ];
       
-      var popout = Number(location.pathname.split('/')[1]);
+      var popout = location.pathname.split('/')[1];
+      // var popout = location.hash.slice(1);
+      if (popout.match(/^\d+$/)) {
+        popout = Number(popout);
+      } else if (popout.match(/^\w+$/)) {
+        links.forEach((link, i) => {
+          if (link["key"] == popout) { popout = i+1; }
+        });
+      } else {
+        popout = NaN;
+      }
 
       links.forEach((link, i) => {
         linkEl = document.createElement("a");
@@ -94,10 +118,10 @@
         document.getElementById("links").append(linkEl);
       });
 
-      if (popout != NaN && popout > 0 && popout < links.length + 1) {
+      if (!isNaN(popout) && popout > 0 && popout < links.length + 1) {
         setTimeout(() => {
           window.location.replace(links[popout - 1]["url"]);
-        }, 3000)
+        }, 2000)
       }
 
     </script>
