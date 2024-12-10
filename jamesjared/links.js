@@ -1,7 +1,7 @@
 var links = {
-    "raeworkshop": {
-        "title": "Beg/Int Heels Workshop Signup: Wednesday 9:30pm @Rae",
-        "url": "https://clients.mindbodyonline.com/classic/ws?studioid=141475&stype=-7&sTG=68&sView=week&sLoc=0&date=10/16/24",
+    "24kpolepopup": {
+        "title": "All Levels Heels Popup: Monday 12/16 @24KPole",
+        "url": "https://www.24kpoledance.com/classes#/class-detail/2351547/r/1457",
         "icon": "fa-solid fa-file-signature"
     },
     "odcclass": {
