@@ -7,11 +7,11 @@
     <!-- Favicon -->
     <link rel="icon" href="avatar.jpg" type="image/x-icon" />
     <!-- Font Awesome icons -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.7.1/css/all.css">
     <!-- Core theme CSS -->
     <link rel="stylesheet" href="style.css">
+    <script src="links.js" defer></script>
   </head>
-
   <body>
     <a id="profilePicture" href="#popup">
       <img src="avatar.jpg" alt="Profile Picture">
@@ -33,22 +33,6 @@
     </div>
 
     <div id="links">
-      <a class="link" href="https://www.linkedin.com/in/james-jared/" target="_blank">
-        <i class="fab fa-linkedin">&nbsp;</i>LinkedIn
-      </a>
-      <a class="link" href="https://twitter.com/thecybergay" target="_blank">
-        <i class="fab fa-twitter">&nbsp;</i>Twitter
-      </a>
-      <a class="link" href="https://github.com/jjared" target="_blank">
-        <i class="fab fa-github">&nbsp;</i>GitHub
-      </a>
     </div>
-    <script>
-      var popout = Number(location.pathname.split('/')[1]);
-      var links = document.getElementsByClassName("link");
-      if (!isNaN(popout) && popout > 0 && popout <= links.length) {
-        links[popout-1].classList.add("popout");
-      }
-    </script>
   </body>
 </html>

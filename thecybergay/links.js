@@ -1,18 +1,23 @@
 var links = {
-    "LinkedIn": {
+    "linkedin": {
         "title": "LinkedIn",
         "url": "https://www.linkedin.com/in/james-jared/",
-        "icon": "fa-solid fa-linkedin"
+        "icon": "fab fa-linkedin"
     },
-    "Twitter": {
-        "title": "Twitter",
+    "twitter": {
+        "title": "X (Twitter)",
         "url": "https://twitter.com/thecybergay",
-        "icon": "fa-solid fa-twitter"
+        "icon": "fab fa-x-twitter"
     },
-    "GitHub": {
+    "github": {
         "title": "GitHub",
         "url": "https://github.com/jjared",
-        "icon": "fa-solid fa-github"
+        "icon": "fab fa-github"
+    },
+    "bluesky": {
+        "title": "Bluesky",
+        "url": "https://bsky.app/profile/thecybergay.bsky.social",
+        "icon": "fab fa-bluesky"
     }
 };
 

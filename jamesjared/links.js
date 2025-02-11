@@ -14,11 +14,11 @@ var links = {
         "url": "https://www.steezy.co/posts/how-to-dance-confidently-in-heels",
         "icon": "fa-solid fa-clipboard-question"
     },
-    "classvids": {
-        "title": "Class Vids",
-        "url": "https://drive.google.com/drive/folders/1L8BN6TwfZJnqCYBZRa2ICI5uJJj1lmcZ?usp=sharing",
-        "icon": "fa-solid fa-video"
-    },
+    // "classvids": {
+    //     "title": "Class Vids",
+    //     "url": "https://drive.google.com/drive/folders/1L8BN6TwfZJnqCYBZRa2ICI5uJJj1lmcZ?usp=sharing",
+    //     "icon": "fa-solid fa-video"
+    // },
     "choreoplaylist": {
         "title": "Choreo Playlist",
         "url": "https://open.spotify.com/playlist/5MfC4Ia0R0zRjMh4nEhX5W?si=1cc8329f599c4b0c",
@@ -30,14 +30,19 @@ var links = {
         "icon": "fab fa-instagram"
     },
     "twitter": {
-        "title": "Twitter",
+        "title": "X (Twitter)",
         "url": "https://twitter.com/jams_jard",
-        "icon": "fab fa-twitter"
+        "icon": "fab fa-x-twitter"
     },
     "tiktok": {
         "title": "TikTok",
         "url": "https://www.tiktok.com/@jamsjard",
         "icon": "fab fa-tiktok"
+    },
+    "bluesky": {
+        "title": "Bluesky",
+        "url": "https://bsky.app/profile/jamsjard.bsky.social",
+        "icon": "fab fa-bluesky"
     },
     "bingo": {
         "title": "Drag Race Bingo",
