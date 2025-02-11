@@ -2,17 +2,17 @@ var links = {
     "LinkedIn": {
         "title": "LinkedIn",
         "url": "https://www.linkedin.com/in/james-jared/",
-        "icon": "fa-linkedin"
+        "icon": "fa-solid fa-linkedin"
     },
     "Twitter": {
         "title": "Twitter",
         "url": "https://twitter.com/thecybergay",
-        "icon": "fa-twitter"
+        "icon": "fa-solid fa-twitter"
     },
     "GitHub": {
         "title": "GitHub",
         "url": "https://github.com/jjared",
-        "icon": "fa-github"
+        "icon": "fa-solid fa-github"
     }
 };
 
