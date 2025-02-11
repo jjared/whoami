@@ -1,18 +1,48 @@
 var links = {
-    "LinkedIn": {
-        "title": "LinkedIn",
-        "url": "https://www.linkedin.com/in/james-jared/",
-        "icon": "fa-linkedin"
+    "odcclass": {
+        "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
+        "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
+        "icon": "fa-solid fa-file-signature"
     },
-    "Twitter": {
+    "raeclass": {
+        "title": "Adv Heels Signup: Wednesday 7:45pm @Rae",
+        "url": "https://clients.mindbodyonline.com/classic/ws?studioid=141475&stype=-7&sView=week&sLoc=0&sTrn=100000416",
+        "icon": "fa-solid fa-file-signature"
+    },
+    "faq": {
+        "title": "Beginner's Guide to Heels",
+        "url": "https://www.steezy.co/posts/how-to-dance-confidently-in-heels",
+        "icon": "fa-solid fa-clipboard-question"
+    },
+    "classvids": {
+        "title": "Class Vids",
+        "url": "https://drive.google.com/drive/folders/1L8BN6TwfZJnqCYBZRa2ICI5uJJj1lmcZ?usp=sharing",
+        "icon": "fa-solid fa-video"
+    },
+    "choreoplaylist": {
+        "title": "Choreo Playlist",
+        "url": "https://open.spotify.com/playlist/5MfC4Ia0R0zRjMh4nEhX5W?si=1cc8329f599c4b0c",
+        "icon": "fa-solid fa-music"
+    },
+    "instagram": {
+        "title": "Instagram",
+        "url": "https://www.instagram.com/jams_jard",
+        "icon": "fab fa-instagram"
+    },
+    "twitter": {
         "title": "Twitter",
-        "url": "https://twitter.com/thecybergay",
-        "icon": "fa-twitter"
+        "url": "https://twitter.com/jams_jard",
+        "icon": "fab fa-twitter"
     },
-    "GitHub": {
-        "title": "GitHub",
-        "url": "https://github.com/jjared",
-        "icon": "fa-github"
+    "tiktok": {
+        "title": "TikTok",
+        "url": "https://www.tiktok.com/@jamsjard",
+        "icon": "fab fa-tiktok"
+    },
+    "bingo": {
+        "title": "Drag Race Bingo",
+        "url": "http://jamesjared.com/bingo",
+        "icon": "fa-solid fa-chess-board"
     }
 };
 
