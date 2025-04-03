@@ -1,4 +1,9 @@
 var links = {
+    "raeintensive": {
+        "title": "Heels Intensive Signup: Wednesday 9pm @Rae",
+        "url": "https://www.raestudios-sf.com/performance-intensive",
+        "icon": "fa-solid fa-file-signature"
+    },
     "odcclass": {
         "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
         "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
