@@ -1,8 +1,13 @@
 var links = {
-    "raeintensive": {
-        "title": "Heels Intensive Signup: Wednesday 9pm @Rae",
-        "url": "https://www.raestudios-sf.com/performance-intensive",
-        "icon": "fa-solid fa-file-signature"
+    "sfbares": {
+        "title": "Donate to James' Broadway Bares Campaign",
+        "url": "https://www.giveoutday.org/story/Nbma1f",
+        "icon": "fa-solid fa-circle-dollar-to-slot"
+    },
+    "sfbarestix": {
+        "title": "Broadway Bares Tickets",
+        "url": "https://broadwaybaressf.org/",
+        "icon": "fa-solid fa-ticket"
     },
     "odcclass": {
         "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
