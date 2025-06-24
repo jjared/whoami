@@ -1,14 +1,4 @@
 var links = {
-    "sfbares": {
-        "title": "Donate to James' Broadway Bares Campaign",
-        "url": "https://www.giveoutday.org/story/Nbma1f",
-        "icon": "fa-solid fa-circle-dollar-to-slot"
-    },
-    "sfbarestix": {
-        "title": "Broadway Bares Tickets",
-        "url": "https://broadwaybaressf.org/",
-        "icon": "fa-solid fa-ticket"
-    },
     "odcclass": {
         "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
         "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
