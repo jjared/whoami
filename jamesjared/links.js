@@ -6,7 +6,7 @@ var links = {
     },
     "raeclass": {
         "title": "Adv Heels Signup: Wednesday 7:45pm @Rae",
-        "url": "https://clients.mindbodyonline.com/classic/ws?studioid=141475&stype=-7&sView=week&sLoc=0&sTrn=100000416",
+        "url": "https://www.raestudios-sf.com/sign-up",
         "icon": "fa-solid fa-file-signature"
     },
     "faq": {
