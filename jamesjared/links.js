@@ -1,4 +1,9 @@
 var links = {
+    "fluxform": {
+        "title": "Tether Dance Project's Flux & Form: Nov 14-16",
+        "url": "https://www.eventbrite.com/e/tether-dance-projects-flux-form-tickets-1645445033389",
+        "icon": "fa-solid fa-ticket"
+    },        
     "odcclass": {
         "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
         "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
