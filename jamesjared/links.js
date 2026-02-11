@@ -1,9 +1,9 @@
 var links = {
-    "fluxform": {
-        "title": "Tether Dance Project's Flux & Form: Nov 14-16",
-        "url": "https://www.eventbrite.com/e/tether-dance-projects-flux-form-tickets-1645445033389",
-        "icon": "fa-solid fa-ticket"
-    },        
+    "raeintensive": {
+        "title": "Weekend Heels Intensive Signup: 2/21-22 2:00pm @Rae",
+        "url": "https://momence.com/l/79hbEJxB",
+        "icon": "fa-solid fa-file-signature"
+    }
     "odcclass": {
         "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
         "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
@@ -15,8 +15,8 @@ var links = {
         "icon": "fa-solid fa-file-signature"
     },
     "faq": {
-        "title": "Beginner's Guide to Heels",
-        "url": "https://www.steezy.co/posts/how-to-dance-confidently-in-heels",
+        "title": "What Heels Should I Wear?",
+        "url": "https://youtu.be/DrGbPtS5Ikw",
         "icon": "fa-solid fa-clipboard-question"
     },
     // "classvids": {
@@ -49,11 +49,11 @@ var links = {
         "url": "https://bsky.app/profile/jamsjard.bsky.social",
         "icon": "fab fa-bluesky"
     },
-    "bingo": {
-        "title": "Drag Race Bingo",
-        "url": "http://jamesjared.com/bingo",
-        "icon": "fa-solid fa-chess-board"
-    }
+    // "bingo": {
+    //    "title": "Drag Race Bingo",
+    //    "url": "http://jamesjared.com/bingo",
+    //    "icon": "fa-solid fa-chess-board"
+    //}
 };
 
 var popout = location.pathname.split('/')[1];
