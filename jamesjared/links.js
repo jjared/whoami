@@ -3,7 +3,7 @@ var links = {
         "title": "Weekend Heels Intensive Signup: 2/21-22 2:00pm @Rae",
         "url": "https://momence.com/l/79hbEJxB",
         "icon": "fa-solid fa-file-signature"
-    }
+    },
     "odcclass": {
         "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
         "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
