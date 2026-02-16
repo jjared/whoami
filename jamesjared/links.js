@@ -14,6 +14,11 @@ var links = {
         "url": "https://www.raestudios-sf.com/sign-up",
         "icon": "fa-solid fa-file-signature"
     },
+    "raeclass": {
+        "title": "Portfolio & Agency Info",
+        "url": "https://www.raeagency.com/dancers/all/3014088/james-jared",
+        "icon": "fa-solid fa-image-portrait"
+    },
     "faq": {
         "title": "What Heels Should I Wear?",
         "url": "https://youtu.be/DrGbPtS5Ikw",
