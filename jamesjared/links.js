@@ -1,9 +1,4 @@
 var links = {
-    "raeintensive": {
-        "title": "Weekend Heels Intensive Signup: 2/21-22 2:00pm @Rae",
-        "url": "https://momence.com/l/79hbEJxB",
-        "icon": "fa-solid fa-file-signature"
-    },
     "odcclass": {
         "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
         "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
@@ -14,7 +9,7 @@ var links = {
         "url": "https://www.raestudios-sf.com/sign-up",
         "icon": "fa-solid fa-file-signature"
     },
-    "raeclass": {
+    "raeagency": {
         "title": "Portfolio & Agency Info",
         "url": "https://www.raeagency.com/dancers/all/3014088/james-jared",
         "icon": "fa-solid fa-image-portrait"
