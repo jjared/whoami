@@ -1,6 +1,6 @@
 var links = {
     "baresdonate": {
-        "tirle": "Donate to my Broadway Bares Campaign!",
+        "title": "Donate to my Broadway Bares Campaign!",
         "url": "https://www.zeffy.com/en-US/donation-form/james-jared",
         "icon": "fa-solid fa-hand-holding-heart"
     },
