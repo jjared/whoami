@@ -4,13 +4,18 @@ var links = {
         "url": "https://www.zeffy.com/en-US/donation-form/james-jared",
         "icon": "fa-solid fa-hand-holding-heart"
     },
-    "odcclass": {
-        "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
-        "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
-        "icon": "fa-solid fa-file-signature"
+    "barestickets": {
+        "title": "Tickets for Broadway Bares 6/14 8pm",
+        "url": "https://broadwaybaressf.org/tickets/",
+        "icon": "fa-solid fa-ticket"
     },
+    //"odcclass": {
+    //    "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
+    //    "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
+    //    "icon": "fa-solid fa-file-signature"
+    //},
     "raeclass": {
-        "title": "Adv Heels Signup: Wednesday 7:45pm @Rae",
+        "title": "Int Heels Signup: Wednesday 7:45pm @Rae",
         "url": "https://www.raestudios-sf.com/sign-up",
         "icon": "fa-solid fa-file-signature"
     },
