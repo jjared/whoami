@@ -1,13 +1,8 @@
 var links = {
-    "baresdonate": {
-        "title": "Donate to my Broadway Bares Campaign!",
-        "url": "https://www.zeffy.com/en-US/donation-form/james-jared",
-        "icon": "fa-solid fa-hand-holding-heart"
-    },
-    "barestickets": {
-        "title": "Tickets for Broadway Bares 6/14 8pm",
-        "url": "https://broadwaybaressf.org/tickets/",
-        "icon": "fa-solid fa-ticket"
+    "vellintensive": {
+        "title": "Int Heels Tricks Intensive 7/14-28",
+        "url": "https://tr.ee/ogOdmBQ7PL",
+        "icon": "fa-solid fa-file-signature"
     },
     //"odcclass": {
     //    "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
