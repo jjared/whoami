@@ -1,18 +1,18 @@
 var links = {
-    "vellintensive": {
-        "title": "Int Heels Tricks Intensive 7/14-28",
-        "url": "https://tr.ee/ogOdmBQ7PL",
-        "icon": "fa-solid fa-file-signature"
-    },
     //"odcclass": {
     //    "title": "Beg Heels Technique Signup: Tuesday 7:30pm @ODC",
     //    "url": "https://clients.mindbodyonline.com/classic/ws?studioid=2717&stype=-112&sView=week&sLoc=0&sTrn=100001628&date=09/03/24",
     //    "icon": "fa-solid fa-file-signature"
     //},
-    "raeclass": {
-        "title": "Int Heels Signup: Wednesday 7:45pm @Rae",
-        "url": "https://www.raestudios-sf.com/sign-up",
-        "icon": "fa-solid fa-file-signature"
+    //"raeclass": {
+    //    "title": "Int Heels Signup: Wednesday 7:45pm @Rae",
+    //    "url": "https://www.raestudios-sf.com/sign-up",
+    //    "icon": "fa-solid fa-file-signature"
+    //},
+    "tetherafterdark": {
+        "title": "Tether After Dark 10/20",
+        "url": "https://www.eventbrite.com/e/tether-after-dark-tickets-2001713696551",
+        "icon": "fa-solid fa-ticket"
     },
     "raeagency": {
         "title": "Portfolio & Agency Info",
