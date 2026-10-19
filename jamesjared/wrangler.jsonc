@@ -22,7 +22,7 @@
     "jamesjared": {
       "name": "jamesjared",
       "kv_namespaces": [
-        { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
+        { "binding": "SITE_DATA", "id": "0c1c462fb5e04227998c2e02d94e8509" }
       ],
       "previews": {
         "kv_namespaces": [
@@ -34,12 +34,12 @@
     "thecybergay": {
       "name": "thecybergay",
       "kv_namespaces": [
-        { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
+        { "binding": "SITE_DATA", "id": "249ac1899b8d49c28634a411577eec6c" }
       ],
       "previews": {
         "kv_namespaces": [
           // Replace with TheCyberGay staging namespace ID, not production.
-          { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
+          { "binding": "SITE_DATA", "id": "38a73845ae084f93b92183ea1dafe583" }
         ]
       }
     }
