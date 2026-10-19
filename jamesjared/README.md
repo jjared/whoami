@@ -85,11 +85,10 @@ KV read, hostname lookup, or Worker page rendering is needed. Links still load
 through their API. The old KV `profile` key is unused and can be deleted;
 `GET /api/profile` no longer exists.
 
-Hosted builds fail when either variable is missing/invalid or the image asset
-does not exist. Handle allows 1-120 characters without a leading `@`; the image
-value is a filename (maximum 255 characters; no slashes, backslashes, whitespace,
-queries, fragments, or colons). The literal `@` and `/` are in the HTML template,
-not added by build logic.
+Hosted builds require both variables and an existing image asset. Values are
+trusted configuration, without format or length checks. Supply the handle without
+`@` and the image filename without a leading slash: those literals are already
+in the HTML template, not added by build logic.
 Values are HTML-escaped. Images use native browser loading with accessible alt
 text, without a JavaScript visibility gate. The 96px avatar reserves layout space.
 Changing build variables requires a rebuild/deployment.

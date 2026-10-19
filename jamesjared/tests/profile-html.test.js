@@ -22,13 +22,18 @@ test("escapes profile text and attribute values", () => {
     assert.ok(html.includes('/photo&quot;.jpg'));
 });
 
-test("missing or invalid build variables fail instead of choosing another site", () => {
-    for (const variables of [{}, { PROFILE_HANDLE: " " }, { PROFILE_HANDLE: "x".repeat(121) },
-        { PROFILE_HANDLE: "@test", PROFILE_IMAGE_PATH: "me.jpg" },
-        ...["https://example.com/photo.jpg", "//example.com/photo.jpg", "/\\example.com", "photo.jpg?x=1", "/me.jpg", "nested/photo.jpg", "..", "x".repeat(256)]
-            .map(PROFILE_IMAGE_PATH => ({ PROFILE_HANDLE: "test", PROFILE_IMAGE_PATH }))]) {
-        assert.throws(() => buildProfileHtml(template, variables));
+test("missing build variables produce a clear configuration error", () => {
+    for (const variables of [{}, { PROFILE_HANDLE: "test" }, { PROFILE_IMAGE_PATH: "me.jpg" },
+        { PROFILE_HANDLE: " ", PROFILE_IMAGE_PATH: "me.jpg" }]) {
+        assert.throws(() => buildProfileHtml(template, variables), /Set PROFILE_HANDLE and PROFILE_IMAGE_PATH/);
     }
+});
+
+test("configured values are escaped without format or length restrictions", () => {
+    const handle = "x".repeat(121);
+    const html = buildProfileHtml(template, { PROFILE_HANDLE: handle, PROFILE_IMAGE_PATH: "photos/my-photo.jpg" });
+    assert.ok(html.includes(`<title>@${handle}</title>`));
+    assert.ok(html.includes('src="/photos/my-photo.jpg"'));
 });
 
 test("the real page template renders profile attributes without runtime placeholders", () => {
