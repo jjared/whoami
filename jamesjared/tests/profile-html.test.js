@@ -5,34 +5,35 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { buildProfileHtml } from "../scripts/profile-html.js";
 
-const template = '<title>{{PROFILE_HANDLE}}</title><img src="{{PROFILE_IMAGE_PATH}}" alt="{{PROFILE_HANDLE}}">';
+const template = '<title>@{{PROFILE_HANDLE}}</title><img src="/{{PROFILE_IMAGE_PATH}}" alt="@{{PROFILE_HANDLE}}">';
 
 test("bakes either profile into static HTML", () => {
-    for (const [handle, imagePath] of [["@jams_jard", "/me.jpg"], ["@thecybergay", "/thecybergay.jpg"]]) {
+    for (const [handle, imagePath] of [["jams_jard", "me.jpg"], ["thecybergay", "thecybergay.jpg"]]) {
         const html = buildProfileHtml(template, { PROFILE_HANDLE: handle, PROFILE_IMAGE_PATH: imagePath });
-        assert.ok(html.includes(`<title>${handle}</title>`));
-        assert.ok(html.includes(`src="${imagePath}"`));
+        assert.ok(html.includes(`<title>@${handle}</title>`));
+        assert.ok(html.includes(`src="/${imagePath}"`));
         assert.equal(html.includes("{{"), false);
     }
 });
 
 test("escapes profile text and attribute values", () => {
-    const html = buildProfileHtml(template, { PROFILE_HANDLE: '<img onerror="bad">&', PROFILE_IMAGE_PATH: '/photo".jpg' });
+    const html = buildProfileHtml(template, { PROFILE_HANDLE: '<img onerror="bad">&', PROFILE_IMAGE_PATH: 'photo".jpg' });
     assert.ok(html.includes("&lt;img onerror=&quot;bad&quot;&gt;&amp;"));
     assert.ok(html.includes('/photo&quot;.jpg'));
 });
 
 test("missing or invalid build variables fail instead of choosing another site", () => {
     for (const variables of [{}, { PROFILE_HANDLE: " " }, { PROFILE_HANDLE: "x".repeat(121) },
-        ...["https://example.com/photo.jpg", "//example.com/photo.jpg", "/\\example.com", "/photo.jpg?x=1"]
-            .map(PROFILE_IMAGE_PATH => ({ PROFILE_HANDLE: "@test", PROFILE_IMAGE_PATH }))]) {
+        { PROFILE_HANDLE: "@test", PROFILE_IMAGE_PATH: "me.jpg" },
+        ...["https://example.com/photo.jpg", "//example.com/photo.jpg", "/\\example.com", "photo.jpg?x=1", "/me.jpg", "nested/photo.jpg", "..", "x".repeat(256)]
+            .map(PROFILE_IMAGE_PATH => ({ PROFILE_HANDLE: "test", PROFILE_IMAGE_PATH }))]) {
         assert.throws(() => buildProfileHtml(template, variables));
     }
 });
 
 test("the real page template renders profile attributes without runtime placeholders", () => {
     const source = readFileSync(new URL("../scripts/index.html", import.meta.url), "utf8");
-    const html = buildProfileHtml(source, { PROFILE_HANDLE: "@thecybergay", PROFILE_IMAGE_PATH: "/thecybergay.jpg" });
+    const html = buildProfileHtml(source, { PROFILE_HANDLE: "thecybergay", PROFILE_IMAGE_PATH: "thecybergay.jpg" });
     assert.ok(html.includes('<div id="userName">@thecybergay</div>'));
     assert.ok(html.includes('src="/thecybergay.jpg"'));
     assert.ok(html.includes('href="/thecybergay.jpg"'));

@@ -5,12 +5,12 @@ import { buildProfileHtml } from "./profile-html.js";
 const local = process.argv.includes("--local");
 if (local && process.env.WORKERS_CI) throw new Error("Local profile defaults cannot be used in Workers Builds.");
 const variables = local ? {
-    PROFILE_HANDLE: process.env.PROFILE_HANDLE ?? "@jams_jard",
-    PROFILE_IMAGE_PATH: process.env.PROFILE_IMAGE_PATH ?? "/me.jpg",
+    PROFILE_HANDLE: process.env.PROFILE_HANDLE ?? "jams_jard",
+    PROFILE_IMAGE_PATH: process.env.PROFILE_IMAGE_PATH ?? "me.jpg",
 } : process.env;
 const template = await readFile(new URL("index.html", import.meta.url), "utf8");
 const html = buildProfileHtml(template, variables);
-await readFile(new URL(`../public${variables.PROFILE_IMAGE_PATH}`, import.meta.url));
+await readFile(new URL(`../public/${variables.PROFILE_IMAGE_PATH}`, import.meta.url));
 const output = new URL("../dist/", import.meta.url);
 await rm(output, { recursive: true, force: true });
 await mkdir(output, { recursive: true });

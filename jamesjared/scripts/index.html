@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{PROFILE_HANDLE}} | whoami</title>
+    <title>@{{PROFILE_HANDLE}} | whoami</title>
     <!-- Favicon -->
-    <link rel="icon" href="{{PROFILE_IMAGE_PATH}}" type="image/jpeg" />
+    <link rel="icon" href="/{{PROFILE_IMAGE_PATH}}" type="image/jpeg" />
     <!-- Font Awesome icons -->
     <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
     <!-- Core theme CSS -->
@@ -15,21 +15,21 @@
   </head>
   <body>
     <button id="profilePicture" type="button" aria-label="Profile picture" aria-pressed="false">
-      <img src="{{PROFILE_IMAGE_PATH}}" alt="{{PROFILE_HANDLE}} profile picture" width="96" height="96">
+      <img src="/{{PROFILE_IMAGE_PATH}}" alt="@{{PROFILE_HANDLE}} profile picture" width="96" height="96">
     </button>
 
     <div class="overlay" id="popup">
       <div class="popup">
         <div class="popup-photo">
-          <a href="{{PROFILE_IMAGE_PATH}}" target="_blank" rel="noopener noreferrer">
-            <img src="{{PROFILE_IMAGE_PATH}}" alt="{{PROFILE_HANDLE}} profile picture">
+          <a href="/{{PROFILE_IMAGE_PATH}}" target="_blank" rel="noopener noreferrer">
+            <img src="/{{PROFILE_IMAGE_PATH}}" alt="@{{PROFILE_HANDLE}} profile picture">
           </a>
         </div>
         <a class="popup-close" onclick="history.back()">&times;</a>
       </div>
     </div>
 
-    <div id="userName">{{PROFILE_HANDLE}}</div>
+    <div id="userName">@{{PROFILE_HANDLE}}</div>
 
     <div id="saveStatus" role="status" hidden>
       <span id="saveMessage">Saved</span>

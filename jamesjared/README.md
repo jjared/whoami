@@ -76,8 +76,8 @@ Set these public **build environment variables** in each Worker's
 
 | Variable | James Jared | TheCyberGay |
 | --- | --- | --- |
-| `PROFILE_HANDLE` | `@jams_jard` | `@thecybergay` |
-| `PROFILE_IMAGE_PATH` | `/me.jpg` | `/thecybergay.jpg` |
+| `PROFILE_HANDLE` | `jams_jard` | `thecybergay` |
+| `PROFILE_IMAGE_PATH` | `me.jpg` | `thecybergay.jpg` |
 
 They are baked into `dist/index.html` for the handle, image/alt text, favicon,
 title, and legacy popup. Both images ship with both sites. No profile API call,
@@ -86,8 +86,10 @@ through their API. The old KV `profile` key is unused and can be deleted;
 `GET /api/profile` no longer exists.
 
 Hosted builds fail when either variable is missing/invalid or the image asset
-does not exist. Handle allows 1-120 characters; image paths must be root-relative
-(maximum 2048 characters; no backslashes, whitespace, queries, or fragments).
+does not exist. Handle allows 1-120 characters without a leading `@`; the image
+value is a filename (maximum 255 characters; no slashes, backslashes, whitespace,
+queries, fragments, or colons). The literal `@` and `/` are in the HTML template,
+not added by build logic.
 Values are HTML-escaped. Images use native browser loading with accessible alt
 text, without a JavaScript visibility gate. The 96px avatar reserves layout space.
 Changing build variables requires a rebuild/deployment.
@@ -149,11 +151,11 @@ npm run dev
 ```
 
 `npm ci` uses the committed lockfile; use `npm install` to add/update dependencies.
-`npm run dev` builds with explicit `--local` defaults (`@jams_jard`, `/me.jpg`).
+`npm run dev` builds with explicit `--local` defaults (`jams_jard`, `me.jpg`).
 Override them locally to preview the other identity:
 
 ```sh
-PROFILE_HANDLE=@thecybergay PROFILE_IMAGE_PATH=/thecybergay.jpg npm run dev
+PROFILE_HANDLE=thecybergay PROFILE_IMAGE_PATH=thecybergay.jpg npm run dev
 ```
 
 Standalone builds and manual deploys require both variables. The `--local`
@@ -325,8 +327,8 @@ The editor uses its
 session cookie and Worker API, never a Cloudflare API token. Deploy manually:
 
 ```sh
-PROFILE_HANDLE=@jams_jard PROFILE_IMAGE_PATH=/me.jpg npm run deploy -- --env jamesjared
-PROFILE_HANDLE=@thecybergay PROFILE_IMAGE_PATH=/thecybergay.jpg npm run deploy -- --env thecybergay
+PROFILE_HANDLE=jams_jard PROFILE_IMAGE_PATH=me.jpg npm run deploy -- --env jamesjared
+PROFILE_HANDLE=thecybergay PROFILE_IMAGE_PATH=thecybergay.jpg npm run deploy -- --env thecybergay
 ```
 
 ### GitHub Deployment
