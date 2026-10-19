@@ -58,10 +58,6 @@ button#profilePicture {
     margin: 0;
 }
 
-[data-profile-image][hidden] {
-    display: none;
-}
-
 .link-destination {
     display: block;
     margin: -10px;
@@ -225,8 +221,7 @@ button#profilePicture:focus-visible {
     color: #ff9cab;
 }
 
-#retrySave,
-#logout {
+#retrySave {
     width: 44px;
     height: 44px;
     border: 1px solid currentColor;
@@ -350,7 +345,6 @@ button#profilePicture:focus-visible {
 #linkDialog button:focus-visible,
 .delete-link:focus-visible,
 #retrySave:focus-visible,
-#logout:focus-visible,
 #addLink:focus-visible {
     outline: 2px solid #75ddc2;
     outline-offset: 2px;

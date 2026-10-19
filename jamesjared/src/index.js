@@ -1,6 +1,5 @@
 import { MAX_LINK_BYTES, validateLinks } from "./link-validation.js";
 import { authenticated, handleAuth } from "./auth.js";
-import { readProfile } from "./profile.js";
 
 function json(data, status = 200, headers = {}) {
   return Response.json(data, { status, headers: { "Cache-Control": "no-store", ...headers } });
@@ -54,16 +53,6 @@ export default {
     const { pathname } = new URL(request.url);
 
     if (["/api/login", "/api/logout", "/api/session"].includes(pathname)) return handleAuth(request, env, pathname);
-
-    if (pathname === "/api/profile") {
-      if (request.method !== "GET") return json({ error: "Method not allowed" }, 405, { Allow: "GET" });
-      try {
-        return json(readProfile(await env.SITE_DATA.get("profile", { type: "json" })));
-      } catch (error) {
-        console.error("Could not read profile from KV", error);
-        return json({ error: "Profile is temporarily unavailable" }, 503);
-      }
-    }
 
     if (pathname !== "/api/links") {
       return json({ error: "Not found" }, 404);

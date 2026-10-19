@@ -5,13 +5,11 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.js",
-    "predev": "npm run build",
+    "predev": "npm run build -- --local",
     "predeploy": "npm run build",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "seed:local": "wrangler kv key put links --binding SITE_DATA --path dev/links.json --local",
-    "seed:profile:jamesjared": "wrangler kv key put profile --binding SITE_DATA --path dev/profile.jamesjared.json --local",
-    "seed:profile:thecybergay": "wrangler kv key put profile --binding SITE_DATA --path dev/profile.thecybergay.json --local",
     "test": "node --test"
   },
   "engines": {

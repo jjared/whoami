@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>whoami</title>
+    <title>{{PROFILE_HANDLE}} | whoami</title>
     <!-- Favicon -->
-    <link rel="icon" data-profile-image-link type="image/jpeg" />
+    <link rel="icon" href="{{PROFILE_IMAGE_PATH}}" type="image/jpeg" />
     <!-- Font Awesome icons -->
     <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css">
     <!-- Core theme CSS -->
@@ -15,29 +15,26 @@
   </head>
   <body>
     <button id="profilePicture" type="button" aria-label="Profile picture" aria-pressed="false">
-      <img data-profile-image alt="Profile Picture" hidden>
+      <img src="{{PROFILE_IMAGE_PATH}}" alt="{{PROFILE_HANDLE}} profile picture" width="96" height="96">
     </button>
 
     <div class="overlay" id="popup">
       <div class="popup">
         <div class="popup-photo">
-          <a data-profile-image-link target="_blank" rel="noopener noreferrer">
-            <img data-profile-image alt="Profile Picture" hidden>
+          <a href="{{PROFILE_IMAGE_PATH}}" target="_blank" rel="noopener noreferrer">
+            <img src="{{PROFILE_IMAGE_PATH}}" alt="{{PROFILE_HANDLE}} profile picture">
           </a>
         </div>
         <a class="popup-close" onclick="history.back()">&times;</a>
       </div>
     </div>
 
-    <div id="userName"></div>
+    <div id="userName">{{PROFILE_HANDLE}}</div>
 
     <div id="saveStatus" role="status" hidden>
       <span id="saveMessage">Saved</span>
       <button id="retrySave" type="button" title="Retry saving" aria-label="Retry saving" hidden>
         <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
-      </button>
-      <button id="logout" type="button" title="Sign out" aria-label="Sign out" hidden>
-        <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
       </button>
     </div>
 

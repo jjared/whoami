@@ -12,8 +12,8 @@ the sibling `thecybergay/` folder is the legacy static site and is not deployed.
 whoami/
   thecybergay/          Legacy static site; not changed or deployed by this app
   jamesjared/           Application and Cloudflare project root
-    public/            Public browser assets; never put secrets here
-      index.html
+    dist/              Generated HTML, static assets, and vendor files; Git-ignored
+    public/            Source browser assets; never put secrets here
       links.js         API loading, login/edit wiring, five-tap reveal, redirects
       js/
         link-list.js   Rendering, add/delete, drag/keyboard ordering, editing state
@@ -22,16 +22,13 @@ whoami/
         link-data.js   Ordering and unique IDs; shared with tests
         link-saver.js  Save queue and retries
         auth-dialog.js Login, session checks, logout
-        profile.js     Loads handle, avatar, favicon, and title from KV
       style.css
       me.jpg           James Jared profile image
       thecybergay.jpg   Shared CyberGay image asset
-      vendor/          Generated dependencies and icon catalog; Git-ignored
     src/               Server-only; not served as assets
       index.js         Worker entry point (wrangler.jsonc main)
       auth.js          Login, sessions, write authorization
       link-validation.js Schema and size limits
-      profile.js       Public profile validation
     tests/
       auth.test.js     Authentication/security
       worker.test.js   API
@@ -39,13 +36,13 @@ whoami/
       link-saver.test.js Queue/transport
       link-data.test.js Ordering/IDs
       icon-catalog.test.js Free icon filtering
-      profile.test.js  Namespace-backed identity
+      profile-html.test.js Static profile rendering and build safeguards
     dev/
       links.json       Optional local link seed
-      profile.jamesjared.json James Jared profile seed
-      profile.thecybergay.json CyberGay profile seed
     scripts/
-      build.js         Copies vendor assets and generates icon catalog
+      build.js         Generates static HTML, vendor assets, and icon catalog
+      index.html       Source HTML template; edit this, not dist/index.html
+      profile-html.js  Validates and escapes public profile build variables
       icon-catalog.js  Converts official metadata to picker data
     .node-version      Node 24.22.0, selected by fnm
     .dev.vars          Local secrets; Git-ignored, not uploaded
@@ -58,8 +55,9 @@ whoami/
 ## Architecture
 
 ```text
-Browser -> Static Assets -> public/ HTML, CSS, JavaScript
-Browser -> /api/* -> Worker -> SITE_DATA KV namespace, keys: links and profile
+Build variables + scripts/index.html + public/ assets -> dist/
+Browser -> Static Assets -> dist/ HTML, CSS, JavaScript
+Browser -> /api/* -> Worker -> SITE_DATA KV namespace, key: links
 ```
 
 Native ES modules (`type="module"`), no framework or bundler. The list delegates
@@ -71,27 +69,30 @@ unsupported methods return 405. Same-origin requests need no CORS configuration.
 Unmatched page paths serve the index: `/instagram`, for example, highlights its
 matching link and redirects after 1.5 seconds. Login activation cancels the redirect.
 
-### Profile Data
+### Build-Time Profile
 
-Each namespace stores a separate `profile` key containing public JSON:
+Set these public **build environment variables** in each Worker's
+**Settings > Build > Variables and secrets**, not its runtime Variables and Secrets:
 
-```json
-{
-  "handle": "@jams_jard",
-  "imagePath": "/me.jpg"
-}
-```
+| Variable | James Jared | TheCyberGay |
+| --- | --- | --- |
+| `PROFILE_HANDLE` | `@jams_jard` | `@thecybergay` |
+| `PROFILE_IMAGE_PATH` | `/me.jpg` | `/thecybergay.jpg` |
 
-The CyberGay seed uses `@thecybergay` and `/thecybergay.jpg`. Both images
-are deployed to both sites; only the namespace selects the displayed path.
-`imagePath` is a root-relative, same-site path (maximum 2048 characters, no
-backslashes, whitespace, queries, or fragments); handle is 1-120 characters.
-`GET /api/profile` sets the visible handle, image/alt text, favicon, page title,
-and legacy photo-popup references. Profile and link requests are independent.
-Missing profile data leaves the handle/photo blank and title `whoami`, with no
-site-specific fallback. Invalid profile data or KV failures return 503 without
-blocking links. Edit the key in Cloudflare KV or upload a seed with Wrangler;
-the profile endpoint is read-only. Link autosaves never modify `profile`.
+They are baked into `dist/index.html` for the handle, image/alt text, favicon,
+title, and legacy popup. Both images ship with both sites. No profile API call,
+KV read, hostname lookup, or Worker page rendering is needed. Links still load
+through their API. The old KV `profile` key is unused and can be deleted;
+`GET /api/profile` no longer exists.
+
+Hosted builds fail when either variable is missing/invalid or the image asset
+does not exist. Handle allows 1-120 characters; image paths must be root-relative
+(maximum 2048 characters; no backslashes, whitespace, queries, or fragments).
+Values are HTML-escaped. Images use native browser loading with accessible alt
+text, without a JavaScript visibility gate. The 96px avatar reserves layout space.
+Changing build variables requires a rebuild/deployment.
+Production and staging builds of the same Worker use its configured build values;
+these are not runtime secrets or KV settings.
 
 ### Link Data
 
@@ -148,6 +149,15 @@ npm run dev
 ```
 
 `npm ci` uses the committed lockfile; use `npm install` to add/update dependencies.
+`npm run dev` builds with explicit `--local` defaults (`@jams_jard`, `/me.jpg`).
+Override them locally to preview the other identity:
+
+```sh
+PROFILE_HANDLE=@thecybergay PROFILE_IMAGE_PATH=/thecybergay.jpg npm run dev
+```
+
+Standalone builds and manual deploys require both variables. The `--local`
+fallback is rejected in Workers Builds (`WORKERS_CI`), preventing wrong-site output.
 No Cloudflare login is needed locally. The dev server binds `0.0.0.0:8787`:
 http://localhost:8787 or `http://<your-LAN-IP>:8787`. LAN IPs can change; macOS
 may require allowing incoming firewall connections. This is dev-only, but
@@ -170,8 +180,6 @@ Local KV persists in Git-ignored `.wrangler/`, separate from production:
 | Command | Effect |
 | --- | --- |
 | `npm run seed:local` | Replace local KV with the eight links in `dev/links.json` |
-| `npm run seed:profile:jamesjared` | Set local `profile` to James Jared |
-| `npm run seed:profile:thecybergay` | Set local `profile` to TheCyberGay |
 | `npx wrangler kv key delete links --binding SITE_DATA --local` | Empty local links |
 
 Edit the seed and rerun to change local data/order, then refresh. It is never
@@ -197,19 +205,21 @@ Production stays empty until explicitly populated through the editor or KV tools
   asking for login if expired. No browser-storage backup exists.
 - Wait for Saved before refreshing. Pending/failed edits trigger an unload
   warning and disable sign-out. Failed initial API loads leave editing locked.
-- The sign-out icon clears this browser's session cookie and locks editing.
-  Five taps are only a reveal gesture; the Worker authorizes every write.
+- Five more profile-picture taps while editing clear this browser's session
+  cookie and lock editing. Logout is blocked until unsaved edits are saved.
+  The gesture is not authorization; the Worker authorizes every write.
 
 ### Icons and Build
 
-`npm run build` copies SortableJS (mouse/touch dragging), Font Awesome CSS,
-webfonts, and license into Git-ignored `public/vendor/`. It generates
+`npm run build` copies `public/` assets into `dist/`, generates its HTML from the
+template, and copies SortableJS, Font Awesome CSS, webfonts, and license into
+Git-ignored `dist/vendor/`. It generates
 `vendor/icons.js` from `@fortawesome/fontawesome-free/metadata/icon-families.json`,
 filtering free classic solid/regular/brand variants (2,060 in version 6.7.2).
 Search uses official names, labels, aliases, and terms; labels distinguish styles.
 No hand-maintained list, Font Awesome API key, or runtime vendor CDN is needed.
 
-Matching fonts/CSS live at `public/vendor/fontawesome/`. To refresh icons, install
+Matching fonts/CSS live at `dist/vendor/fontawesome/`. To refresh icons, install
 a newer Font Awesome package, rebuild, and commit package/lockfile changes.
 Build runs automatically before `npm run dev` and `npm run deploy`.
 
@@ -218,7 +228,6 @@ Build runs automatically before `npm run dev` and `npm run deploy`.
 | Route | Behavior |
 | --- | --- |
 | `GET /api/links` | Public link document; missing data returns `{}` |
-| `GET /api/profile` | Public handle/image path from `profile`; missing key returns `{}`; writes return 405 |
 | `PUT /api/links` | Authenticated JSON replacement; omitted IDs delete, `{}` clears all; returns `{"saved":true}` |
 | `POST /api/login` | JSON `{ "username": "...", "password": "..." }`; sets session cookie |
 | `GET /api/session` | `{ "authenticated": true/false }`; no token returned |
@@ -295,17 +304,15 @@ npx wrangler kv namespace create SITE_DATA --env thecybergay
 
 Replace each environment's all-zero `id` in `wrangler.jsonc` with its own returned
 namespace ID (not a secret). Both bindings stay named `SITE_DATA`, but **the IDs
-must differ** to isolate each site's links and profile. Named environments deploy
+must differ** to isolate each site's links. Named environments deploy
 Workers called `jamesjared` and `thecybergay`; set each Worker's domain in Cloudflare.
 The top-level namespace/name remain the existing default development/legacy target.
 Always specify `--env` for production commands to avoid deploying the wrong target.
 
-Seed each production profile, then configure its secrets as described above:
-
-```sh
-npx wrangler kv key put profile --binding SITE_DATA --path dev/profile.jamesjared.json --remote --env jamesjared
-npx wrangler kv key put profile --binding SITE_DATA --path dev/profile.thecybergay.json --remote --env thecybergay
-```
+Configure profile build variables and runtime authentication secrets as described
+above. No profile value is needed in KV. Preview bindings under each environment's
+`previews` block must point to separate staging namespaces, with preview auth secrets
+configured separately from production.
 
 Empty links are supported. Populate through the editor, dashboard, or Wrangler:
 
@@ -314,12 +321,12 @@ npx wrangler kv key put links '{"instagram":{"title":"Instagram","url":"https://
 ```
 
 `--remote` writes production; use `--local` without `--env` for the default local KV.
-Profile seed commands replace only `profile`, not links. The editor uses its
+The editor uses its
 session cookie and Worker API, never a Cloudflare API token. Deploy manually:
 
 ```sh
-npm run deploy -- --env jamesjared
-npm run deploy -- --env thecybergay
+PROFILE_HANDLE=@jams_jard PROFILE_IMAGE_PATH=/me.jpg npm run deploy -- --env jamesjared
+PROFILE_HANDLE=@thecybergay PROFILE_IMAGE_PATH=/thecybergay.jpg npm run deploy -- --env thecybergay
 ```
 
 ### GitHub Deployment
@@ -330,14 +337,20 @@ configure Workers Builds separately:
 | Setting | Value |
 | --- | --- |
 | Root directory | `jamesjared` |
-| Production branch | Your deployment branch |
-| Build command | `npm test` |
-| Deploy command (James Jared) | `npm run deploy -- --env jamesjared` |
-| Deploy command (TheCyberGay) | `npm run deploy -- --env thecybergay` |
+| Production branch | `main` |
+| Preview builds | Enabled; `staging` pushes create previews |
+| Build command | `npm test && npm run build` |
+| Deploy command (James Jared) | `npx wrangler deploy --env jamesjared` |
+| Preview command (James Jared) | `npx wrangler preview --env jamesjared` |
+| Deploy command (TheCyberGay) | `npx wrangler deploy --env thecybergay` |
+| Preview command (TheCyberGay) | `npx wrangler preview --env thecybergay` |
 | Node | `24.22.0` (`NODE_VERSION` if needed) |
 
-Cloudflare installs npm dependencies first; deployment builds vendor assets and
-the icon catalog automatically. Commit the application, lockfile, and real KV IDs.
+Cloudflare installs npm dependencies first. Configure `PROFILE_HANDLE` and
+`PROFILE_IMAGE_PATH` in each Worker's build settings before retrying a build.
+The build command generates HTML and vendor assets for both deploy and preview;
+direct Wrangler commands do not invoke npm's build hooks. Commit the template,
+application, lockfile, and real KV IDs, not generated HTML or vendor files.
 Branch pushes deploy each configured Worker from this shared app, not the legacy
 sibling site's files. Use
 Wrangler login locally and Cloudflare's managed Git integration for deployment.
