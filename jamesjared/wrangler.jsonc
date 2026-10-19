@@ -23,13 +23,25 @@
       "name": "jamesjared",
       "kv_namespaces": [
         { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
-      ]
+      ],
+      "previews": {
+        "kv_namespaces": [
+          // Replace with the James Jared staging namespace ID, not production.
+          { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
+        ]
+      }
     },
     "thecybergay": {
       "name": "thecybergay",
       "kv_namespaces": [
         { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
-      ]
+      ],
+      "previews": {
+        "kv_namespaces": [
+          // Replace with TheCyberGay staging namespace ID, not production.
+          { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
+        ]
+      }
     }
   }
 }
