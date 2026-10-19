@@ -1,11 +1,6 @@
 export function buildProfileHtml(template, variables) {
     const handle = variables.PROFILE_HANDLE?.trim();
     const imagePath = variables.PROFILE_IMAGE_PATH;
-    if (!handle || handle.startsWith("@") || handle.length > 120) throw new Error("Set PROFILE_HANDLE to 1-120 characters without a leading @ in build variables.");
-    if (!imagePath || imagePath === "." || imagePath === ".." ||
-        /[/\\\s?#:]/.test(imagePath) || imagePath.length > 255) {
-        throw new Error("Set PROFILE_IMAGE_PATH to an image filename without slashes in build variables.");
-    }
     const escape = value => value.replace(/[&<>"']/g, character => ({
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
     })[character]);
