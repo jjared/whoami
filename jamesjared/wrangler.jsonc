@@ -1,0 +1,35 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jamesjaredd",
+  "main": "src/index.js",
+  "compatibility_date": "2026-10-18",
+  "dev": {
+    "ip": "0.0.0.0",
+    "port": 8787
+  },
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api", "/api/*"]
+  },
+  "kv_namespaces": [
+    {
+      "binding": "SITE_DATA",
+      "id": "00000000000000000000000000000000"
+    }
+  ],
+  "env": {
+    "jamesjared": {
+      "name": "jamesjared",
+      "kv_namespaces": [
+        { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
+      ]
+    },
+    "thecybergay": {
+      "name": "thecybergay",
+      "kv_namespaces": [
+        { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
+      ]
+    }
+  }
+}

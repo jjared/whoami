@@ -45,6 +45,78 @@ body {
     text-decoration: none;
 }
 
+button#profilePicture {
+    border: 0;
+    padding: 0;
+    background: transparent;
+    color: var(--accentColor);
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+#profilePicture img {
+    margin: 0;
+}
+
+[data-profile-image][hidden] {
+    display: none;
+}
+
+.link-destination {
+    display: block;
+    margin: -10px;
+    padding: 10px;
+    color: inherit;
+    text-decoration: none;
+}
+
+.reorder-handle {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 44px;
+    border: 0;
+    border-radius: 0 8px 8px 0;
+    background: transparent;
+    color: inherit;
+    cursor: grab;
+    touch-action: none;
+}
+
+.reordering .reorder-handle {
+    display: block;
+}
+
+.reordering .link-destination {
+    padding-left: 44px;
+    padding-right: 44px;
+}
+
+.reorder-handle:active {
+    cursor: grabbing;
+}
+
+.reorder-handle:focus-visible,
+button#profilePicture:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 3px;
+}
+
+.reorder-ghost {
+    opacity: 0.3;
+}
+
+.reordering .popout {
+    animation: none;
+}
+
+.reorder-chosen .link {
+    background-color: var(--accentColor);
+    color: var(--bgColor);
+}
+
 #links {
     max-width: 675px;
     width: auto;
@@ -68,6 +140,269 @@ body {
     text-decoration: none;
     /* transition: all .25s cubic-bezier(.08, .59, .29, .99); */
     -webkit-tap-highlight-color: transparent;
+}
+
+.link-row {
+    margin: 0 10px 10px;
+    min-width: 0;
+}
+
+.link-row .link {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.reordering .link-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 44px;
+    gap: 16px;
+    align-items: center;
+}
+
+.delete-link {
+    display: none;
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    color: #fff;
+    background: #ba263d;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.reordering .delete-link {
+    display: flex;
+}
+
+.delete-link:hover {
+    background: #dc304a;
+}
+
+#addLink {
+    box-sizing: border-box;
+    width: calc(100% - 80px);
+    max-width: 595px;
+    margin: 27px auto 10px;
+    position: relative;
+    left: -30px;
+    padding: 10px;
+    border: 2px dashed var(--accentColor);
+    border-radius: 10px;
+    background: transparent;
+    color: var(--accentColor);
+    font: inherit;
+    cursor: pointer;
+}
+
+#addLink:not([hidden]) {
+    display: block;
+}
+
+#addLink:not([hidden]) + #links {
+    margin-top: 0;
+}
+
+#addLink:hover {
+    background: #ffffff14;
+}
+
+#saveStatus:not([hidden]) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    margin: 12px 10px -12px;
+    color: var(--accentColor);
+    font-size: 0.875rem;
+}
+
+#saveStatus[data-state="error"] {
+    color: #ff9cab;
+}
+
+#retrySave,
+#logout {
+    width: 44px;
+    height: 44px;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+}
+
+#linkDialog,
+#authDialog {
+    box-sizing: border-box;
+    width: min(440px, calc(100% - 24px));
+    max-height: calc(100dvh - 32px);
+    padding: 24px;
+    border: 1px solid #52616d;
+    border-radius: 8px;
+    background: #17222c;
+    color: #fff;
+    font-family: var(--font);
+    overflow-y: auto;
+}
+
+#linkDialog::backdrop,
+#authDialog::backdrop {
+    background: #000a;
+}
+
+.dialog-header,
+.dialog-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.dialog-header {
+    margin-bottom: 20px;
+}
+
+.dialog-header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+}
+
+#linkForm > label,
+#authForm > label {
+    display: block;
+    margin: 16px 0 6px;
+}
+
+#linkForm input:not([type="radio"]),
+#authForm input {
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    border: 1px solid #6c7a85;
+    border-radius: 4px;
+    padding: 10px 12px;
+    background: #0e171f;
+    color: #fff;
+    font: inherit;
+    font-size: 1rem;
+}
+
+#linkForm fieldset {
+    border: 0;
+    padding: 0;
+    margin: 20px 0;
+    min-width: 0;
+}
+
+#linkForm legend {
+    padding: 0;
+    margin-bottom: 8px;
+}
+
+#iconOptions {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 44px);
+    justify-content: start;
+    gap: 6px;
+    max-height: 194px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 3px;
+}
+
+.icon-option {
+    display: grid;
+    position: relative;
+    place-items: center;
+    height: 44px;
+    border-radius: 4px;
+    background: #ffffff0d;
+    font-size: 1.25rem;
+    cursor: pointer;
+}
+
+.icon-option[hidden] {
+    display: none;
+}
+
+.icon-option input {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.icon-option:has(:checked) {
+    background: #fff;
+    color: #17222c;
+}
+
+.icon-option:has(:focus-visible),
+#linkForm input:focus-visible,
+#authForm input:focus-visible,
+#authDialog button:focus-visible,
+#linkDialog button:focus-visible,
+.delete-link:focus-visible,
+#retrySave:focus-visible,
+#logout:focus-visible,
+#addLink:focus-visible {
+    outline: 2px solid #75ddc2;
+    outline-offset: 2px;
+}
+
+.dialog-actions {
+    justify-content: flex-end;
+}
+
+.dialog-actions button,
+.icon-button {
+    min-height: 44px;
+    padding: 10px 16px;
+    border: 1px solid #6c7a85;
+    border-radius: 4px;
+    font: inherit;
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+}
+
+.icon-button {
+    width: 44px;
+    padding: 0;
+    border: 0;
+}
+
+.dialog-actions .primary-action {
+    border-color: #fff;
+    background: #fff;
+    color: #17222c;
+}
+
+#authError {
+    color: #ff9cab;
+    min-height: 1.25em;
+    overflow-wrap: anywhere;
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: wait;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
 }
 
 @media (hover: hover) {

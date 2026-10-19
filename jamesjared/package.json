@@ -1,0 +1,28 @@
+{
+  "name": "jamesjared",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "predev": "npm run build",
+    "predeploy": "npm run build",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "seed:local": "wrangler kv key put links --binding SITE_DATA --path dev/links.json --local",
+    "seed:profile:jamesjared": "wrangler kv key put profile --binding SITE_DATA --path dev/profile.jamesjared.json --local",
+    "seed:profile:thecybergay": "wrangler kv key put profile --binding SITE_DATA --path dev/profile.thecybergay.json --local",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "devDependencies": {
+    "wrangler": "^4.151.1"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "6.7.2",
+    "jose": "^6.2.12",
+    "sortablejs": "^1.15.7"
+  }
+}

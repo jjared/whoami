@@ -1,0 +1,50 @@
+{
+  "tetherafterdark": {
+    "title": "Tether After Dark 10/20",
+    "url": "https://www.eventbrite.com/e/tether-after-dark-tickets-2001713696551",
+    "icon": "fa-solid fa-ticket",
+    "order": 10
+  },
+  "raeagency": {
+    "title": "Portfolio & Agency Info",
+    "url": "https://www.raeagency.com/dancers/all/3014088/james-jared",
+    "icon": "fa-solid fa-image-portrait",
+    "order": 20
+  },
+  "faq": {
+    "title": "What Heels Should I Wear?",
+    "url": "https://youtu.be/DrGbPtS5Ikw",
+    "icon": "fa-solid fa-clipboard-question",
+    "order": 30
+  },
+  "choreoplaylist": {
+    "title": "Choreo Playlist",
+    "url": "https://open.spotify.com/playlist/5MfC4Ia0R0zRjMh4nEhX5W?si=1cc8329f599c4b0c",
+    "icon": "fa-solid fa-music",
+    "order": 40
+  },
+  "instagram": {
+    "title": "Instagram",
+    "url": "https://www.instagram.com/jams_jard",
+    "icon": "fab fa-instagram",
+    "order": 50
+  },
+  "twitter": {
+    "title": "X (Twitter)",
+    "url": "https://twitter.com/jams_jard",
+    "icon": "fab fa-x-twitter",
+    "order": 60
+  },
+  "tiktok": {
+    "title": "TikTok",
+    "url": "https://www.tiktok.com/@jamsjard",
+    "icon": "fab fa-tiktok",
+    "order": 70
+  },
+  "bluesky": {
+    "title": "Bluesky",
+    "url": "https://bsky.app/profile/jamsjard.bsky.social",
+    "icon": "fab fa-bluesky",
+    "order": 80
+  }
+}
