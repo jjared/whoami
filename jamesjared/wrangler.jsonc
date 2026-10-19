@@ -27,7 +27,7 @@
       "previews": {
         "kv_namespaces": [
           // Replace with the James Jared staging namespace ID, not production.
-          { "binding": "SITE_DATA", "id": "00000000000000000000000000000000" }
+          { "binding": "SITE_DATA", "id": "1ca75e09ec254e48998323cb12476fbf" }
         ]
       }
     },
