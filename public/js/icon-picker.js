@@ -31,5 +31,12 @@ export function createIconPicker(search, options, emptyMessage) {
     }
 
     search.addEventListener("input", filter);
-    return { reset: filter };
+    return {
+        reset: filter,
+        select(className) {
+            for (const radio of options.querySelectorAll('input[type="radio"]')) {
+                radio.checked = radio.value === className;
+            }
+        },
+    };
 }

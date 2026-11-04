@@ -22,8 +22,13 @@ const saver = createLinkSaver((state, error) => {
         saveMessage.textContent = "Session expired. Sign in to save.";
     }
 });
-const list = createLinkList(container, addLink, links => saver.queue(links));
-const dialog = createLinkDialog(link => list.add(link));
+const list = createLinkList(
+    container,
+    addLink,
+    links => saver.queue(links),
+    (key, link) => dialog.open(link, key),
+);
+const dialog = createLinkDialog((link, key) => key ? list.update(key, link) : list.add(link), () => list.getKeys());
 let profileClicks = 0;
 let redirectTimeout;
 let loaded = false;
