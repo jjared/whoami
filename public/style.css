@@ -206,6 +206,66 @@ button#profilePicture:focus-visible {
     background: #ffffff14;
 }
 
+.link-row {
+    overflow: hidden;
+    touch-action: pan-y;
+}
+
+.shortlink-copy-action {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 84px;
+    border-radius: 0 8px 8px 0;
+    color: #17222c;
+    background: #75ddc2;
+    font-weight: bold;
+    visibility: hidden;
+    clip-path: inset(0 0 0 100%);
+}
+
+.link-row.swiping .shortlink-copy-action {
+    visibility: visible;
+    clip-path: inset(0 0 0 calc(100% - var(--swipe-reveal, 0px)));
+}
+
+.reordering .shortlink-copy-action {
+    display: none;
+}
+
+.copy-toast {
+    position: fixed;
+    z-index: 20;
+    left: 50%;
+    bottom: calc(12px + env(safe-area-inset-bottom) + var(--visible-bottom-gap, 0px));
+    max-width: calc(100vw - 32px);
+    padding: 9px 14px;
+    transform: translateX(-50%);
+    border: 1px solid #6c7a85;
+    border-radius: 4px;
+    background: #17222c;
+    color: #fff;
+    box-shadow: 0 6px 24px #0008;
+    overflow-wrap: anywhere;
+}
+
+.copy-toast[hidden] {
+    display: none;
+}
+
+.copy-toast[data-state="success"] {
+    border-color: #75ddc2;
+}
+
+.copy-toast[data-state="error"] {
+    border-color: #ff9cab;
+}
+
 #saveStatus:not([hidden]) {
     display: flex;
     justify-content: center;
