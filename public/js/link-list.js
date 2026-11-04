@@ -32,10 +32,11 @@ function createRow(key, link, popout = "") {
     anchor.append(icon, document.createTextNode(` ${link.title}`));
     const handle = iconButton(`Reorder ${link.title}`, "reorder-handle", "fa-solid fa-grip-vertical");
     handle.setAttribute("aria-keyshortcuts", "ArrowUp ArrowDown Home End");
-    const copyAction = document.createElement("div");
+    const copyAction = document.createElement("button");
+    copyAction.type = "button";
     copyAction.className = "shortlink-copy-action";
-    copyAction.setAttribute("role", "status");
-    copyAction.setAttribute("aria-live", "polite");
+    copyAction.setAttribute("aria-label", `Copy shortlink /${key}`);
+    copyAction.title = `Copy shortlink /${key}`;
     const copyIcon = document.createElement("i");
     copyIcon.className = "fa-solid fa-copy";
     copyIcon.setAttribute("aria-hidden", "true");
@@ -43,7 +44,6 @@ function createRow(key, link, popout = "") {
     copyLabel.className = "shortlink-copy-label";
     copyLabel.textContent = "Copy";
     copyAction.append(copyIcon, copyLabel);
-    copyAction.setAttribute("aria-hidden", "true");
     box.append(anchor, copyAction, handle);
     row.append(box, iconButton(`Delete ${link.title}`, "delete-link", "fa-solid fa-trash-can"));
     return row;
@@ -54,13 +54,24 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
     const copyToast = document.getElementById("copyToast");
     const records = new Map();
     let activeSwipe = null;
-    let activeWheel = null;
-    let wheelTimer;
+    let hoverRow = null;
+    let hoverDismissedRow = null;
+    let hoverTimer;
+    const hideTimers = new Map();
+    const closeTimers = new Map();
     let toastTimer;
     let suppressClickUntil = 0;
 
+    function clearTimer(timers, row) {
+        const timer = timers.get(row);
+        if (timer !== undefined) clearTimeout(timer);
+        timers.delete(row);
+    }
+
     function clearRowSwipe(row) {
-        row.classList.remove("swiping", "copy-confirmed");
+        clearTimer(hideTimers, row);
+        clearTimer(closeTimers, row);
+        row.classList.remove("swiping", "copy-confirmed", "hover-reveal", "closing-reveal");
         row.style.removeProperty("--swipe-reveal");
     }
 
@@ -69,24 +80,104 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
             clearRowSwipe(row);
             return;
         }
+        clearTimer(hideTimers, row);
+        clearTimer(closeTimers, row);
+        row.classList.remove("closing-reveal");
         row.classList.add("swiping");
         row.style.setProperty("--swipe-reveal", `${Math.min(distance, COPY_DISTANCE)}px`);
     }
 
-    async function finishCopyGesture(row, key, shouldCopy) {
-        clearRowSwipe(row);
-        if (shouldCopy) await copyShortlink(key);
+    function closeCopyReveal(row) {
+        clearTimer(hideTimers, row);
+        clearTimer(closeTimers, row);
+        if (hoverRow === row) {
+            hoverRow = null;
+            hoverDismissedRow = row;
+            clearTimeout(hoverTimer);
+            hoverTimer = undefined;
+        }
+        row.classList.remove("swiping", "hover-reveal");
+        row.classList.add("closing-reveal");
+        row.style.setProperty("--swipe-reveal", "0px");
+        closeTimers.set(row, setTimeout(() => {
+            row.classList.remove("closing-reveal");
+            row.style.removeProperty("--swipe-reveal");
+            closeTimers.delete(row);
+        }, 180));
+    }
+
+    function scheduleHide(row) {
+        clearTimer(hideTimers, row);
+        hideTimers.set(row, setTimeout(() => {
+            hideTimers.delete(row);
+            if (row.classList.contains("swiping")) closeCopyReveal(row);
+        }, 2000));
+    }
+
+    function finishSwipeGesture(row, distance) {
+        if (distance < COPY_DISTANCE) {
+            clearRowSwipe(row);
+            return;
+        }
+        revealCopy(row, COPY_DISTANCE);
+        scheduleHide(row);
+    }
+
+    function clearHoverReveal(delayHide = true) {
+        clearTimeout(hoverTimer);
+        hoverTimer = undefined;
+        if (hoverRow) {
+            const row = hoverRow;
+            if (delayHide && row.classList.contains("swiping")) scheduleHide(row);
+            else clearRowSwipe(row);
+        }
+        hoverRow = null;
+    }
+
+    function updateHoverReveal(event) {
+        if (event.pointerType !== "mouse") return;
+        const row = event.target.closest(".link-row");
+        const box = row?.querySelector(".link");
+        const bounds = box?.getBoundingClientRect();
+        const inCopyArea = bounds && event.clientX >= bounds.right - COPY_DISTANCE &&
+            event.clientX <= bounds.right && event.clientY >= bounds.top && event.clientY <= bounds.bottom;
+        if (hoverDismissedRow && (row !== hoverDismissedRow || !inCopyArea)) hoverDismissedRow = null;
+        if (editing || !inCopyArea) {
+            if (hoverRow) clearHoverReveal();
+            return;
+        }
+        if (hoverDismissedRow === row) return;
+        if (hoverRow === row) {
+            clearTimer(hideTimers, row);
+            return;
+        }
+        if (hoverRow) clearHoverReveal();
+        if (closeTimers.has(row)) {
+            clearTimer(closeTimers, row);
+            row.classList.remove("closing-reveal");
+            row.classList.add("swiping", "hover-reveal");
+            row.style.setProperty("--swipe-reveal", `${COPY_DISTANCE}px`);
+            hoverRow = row;
+            return;
+        }
+        if (hideTimers.has(row)) {
+            clearTimer(hideTimers, row);
+            hoverRow = row;
+            return;
+        }
+        hoverRow = row;
+        hoverTimer = setTimeout(() => {
+            hoverTimer = undefined;
+            if (editing || hoverRow !== row) return;
+            row.classList.add("hover-reveal");
+            row.querySelector(".shortlink-copy-action").getBoundingClientRect();
+            revealCopy(row, COPY_DISTANCE);
+        }, 500);
     }
 
     function cancelSwipe() {
         if (activeSwipe) clearRowSwipe(activeSwipe.row);
         activeSwipe = null;
-    }
-
-    function cancelWheelSwipe() {
-        clearTimeout(wheelTimer);
-        if (activeWheel) clearRowSwipe(activeWheel.row);
-        activeWheel = null;
     }
 
     function copyWithLegacyCommand(text) {
@@ -185,7 +276,6 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
         const destination = event.target.closest(".link-destination");
         if (!destination) return;
         cancelSwipe();
-        cancelWheelSwipe();
         const row = destination.closest(".link-row");
         activeSwipe = {
             pointerId: event.pointerId,
@@ -199,6 +289,7 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
     });
 
     document.addEventListener("pointermove", event => {
+        updateHoverReveal(event);
         if (!activeSwipe || event.pointerId !== activeSwipe.pointerId) return;
         const deltaX = event.clientX - activeSwipe.startX;
         const deltaY = event.clientY - activeSwipe.startY;
@@ -221,43 +312,12 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
         const swipe = activeSwipe;
         activeSwipe = null;
         if (swipe.moved) suppressClickUntil = Date.now() + 700;
-        await finishCopyGesture(swipe.row, swipe.key, swipe.deltaX <= -COPY_DISTANCE);
+        finishSwipeGesture(swipe.row, -swipe.deltaX);
     });
 
     document.addEventListener("pointercancel", event => {
         if (activeSwipe?.pointerId === event.pointerId) cancelSwipe();
     });
-
-    container.addEventListener("wheel", event => {
-        if (editing) return;
-        const destination = event.target.closest(".link-destination");
-        const scrollLeft = event.deltaX || (event.shiftKey ? -event.deltaY : 0);
-        if (!destination || !scrollLeft || (!event.shiftKey && Math.abs(scrollLeft) < Math.abs(event.deltaY))) return;
-        const row = destination.closest(".link-row");
-        if (!activeWheel || activeWheel.row !== row) {
-            cancelWheelSwipe();
-            if (scrollLeft < 0) return;
-            activeWheel = { row, key: row.dataset.id, distance: 0, copied: false };
-        }
-        event.preventDefault();
-        if (activeWheel.copied) {
-            clearTimeout(wheelTimer);
-            wheelTimer = setTimeout(() => { activeWheel = null; }, 180);
-            return;
-        }
-        activeWheel.distance = Math.max(0, Math.min(COPY_DISTANCE, activeWheel.distance + scrollLeft));
-        revealCopy(row, activeWheel.distance);
-        if (activeWheel.distance >= COPY_DISTANCE) {
-            activeWheel.copied = true;
-            clearRowSwipe(row);
-            void copyShortlink(activeWheel.key);
-        }
-        clearTimeout(wheelTimer);
-        wheelTimer = setTimeout(() => {
-            if (activeWheel) clearRowSwipe(activeWheel.row);
-            activeWheel = null;
-        }, 180);
-    }, { passive: false });
 
     function updateOrder() {
         for (const [index, row] of [...container.children].entries()) {
@@ -290,6 +350,14 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
     container.addEventListener("click", event => {
         const destination = event.target.closest(".link-destination");
         if (!editing) {
+            const copyButton = event.target.closest(".shortlink-copy-action");
+            if (copyButton) {
+                event.preventDefault();
+                const row = copyButton.closest(".link-row");
+                closeCopyReveal(row);
+                void copyShortlink(row.dataset.id);
+                return;
+            }
             if (destination && Date.now() < suppressClickUntil) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -338,13 +406,14 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
         isEditing: () => editing,
         getKeys: () => [...records.keys()],
         enableEditing() {
+            clearHoverReveal();
             editing = true;
             container.classList.add("reordering");
             sortable.option("disabled", false);
         },
         disableEditing() {
             cancelSwipe();
-            cancelWheelSwipe();
+            clearHoverReveal();
             editing = false;
             container.classList.remove("reordering");
             sortable.option("disabled", true);

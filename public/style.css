@@ -221,12 +221,16 @@ button#profilePicture:focus-visible {
     justify-content: center;
     gap: 7px;
     width: 84px;
+    padding: 0;
+    border: 0;
     border-radius: 0 8px 8px 0;
     color: #17222c;
     background: #75ddc2;
+    font: inherit;
     font-weight: bold;
     visibility: hidden;
     clip-path: inset(0 0 0 100%);
+    cursor: pointer;
 }
 
 .link-row.swiping .shortlink-copy-action {
@@ -234,8 +238,23 @@ button#profilePicture:focus-visible {
     clip-path: inset(0 0 0 calc(100% - var(--swipe-reveal, 0px)));
 }
 
+.link-row.hover-reveal .shortlink-copy-action,
+.link-row.closing-reveal .shortlink-copy-action {
+    transition: clip-path 180ms ease-out;
+}
+
+.link-row.closing-reveal .shortlink-copy-action {
+    visibility: visible;
+    clip-path: inset(0 0 0 100%);
+}
+
 .reordering .shortlink-copy-action {
     display: none;
+}
+
+.shortlink-copy-action:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: -4px;
 }
 
 .copy-toast {
