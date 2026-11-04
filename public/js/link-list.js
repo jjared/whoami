@@ -1,4 +1,4 @@
-import { createLinkId, orderLinks } from "./link-data.js";
+import { orderLinks } from "./link-data.js";
 
 function iconButton(label, className, icon) {
     const button = document.createElement("button");
@@ -35,7 +35,7 @@ function createRow(key, link, popout = "") {
     return row;
 }
 
-export function createLinkList(container, addButton, onChange = () => {}) {
+export function createLinkList(container, addButton, onChange = () => {}, onEdit = () => {}) {
     let editing = false;
     const records = new Map();
 
@@ -69,7 +69,13 @@ export function createLinkList(container, addButton, onChange = () => {}) {
 
     container.addEventListener("click", event => {
         if (!editing) return;
-        if (event.target.closest(".link-destination")) event.preventDefault();
+        const destination = event.target.closest(".link-destination");
+        if (destination) {
+            event.preventDefault();
+            const row = destination.closest(".link-row");
+            onEdit(row.dataset.id, records.get(row.dataset.id));
+            return;
+        }
         const remove = event.target.closest(".delete-link");
         if (!remove) return;
         const row = remove.closest(".link-row");
@@ -103,6 +109,7 @@ export function createLinkList(container, addButton, onChange = () => {}) {
 
     return {
         isEditing: () => editing,
+        getKeys: () => [...records.keys()],
         enableEditing() {
             editing = true;
             container.classList.add("reordering");
@@ -130,12 +137,38 @@ export function createLinkList(container, addButton, onChange = () => {}) {
         },
         add(link) {
             if (!editing) return;
-            const key = createLinkId(link.title, [...container.children].map(row => row.dataset.id));
+            const key = link.key;
+            if (records.has(key)) return false;
             const row = createRow(key, link);
-            records.set(key, { ...link });
+            records.set(key, { title: link.title, url: link.url, icon: link.icon });
             container.prepend(row);
             commit();
             row.querySelector(".reorder-handle").focus();
+            return true;
+        },
+        update(previousKey, link) {
+            if (!editing) return;
+            const key = link.key;
+            if (key !== previousKey && records.has(key)) return false;
+            const row = [...container.children].find(candidate => candidate.dataset.id === previousKey);
+            if (!row) return false;
+
+            records.delete(previousKey);
+            records.set(key, { title: link.title, url: link.url, icon: link.icon });
+            row.dataset.id = key;
+            const destination = row.querySelector(".link-destination");
+            destination.href = link.url;
+            const icon = destination.querySelector("i");
+            icon.className = link.icon;
+            destination.replaceChildren(icon, document.createTextNode(` ${link.title}`));
+            const reorderHandle = row.querySelector(".reorder-handle");
+            reorderHandle.title = `Reorder ${link.title}`;
+            reorderHandle.setAttribute("aria-label", `Reorder ${link.title}`);
+            const deleteButton = row.querySelector(".delete-link");
+            deleteButton.title = `Delete ${link.title}`;
+            deleteButton.setAttribute("aria-label", `Delete ${link.title}`);
+            commit();
+            return true;
         },
     };
 }

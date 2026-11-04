@@ -76,6 +76,8 @@
         </header>
         <label for="linkTitle">Title</label>
         <input id="linkTitle" name="title" maxlength="120" required autocomplete="off" autofocus>
+        <label for="linkKey">Shortlink</label>
+        <input id="linkKey" name="key" maxlength="128" pattern="[A-Za-z0-9][A-Za-z0-9_-]{0,127}" required autocomplete="off" spellcheck="false">
         <label for="linkUrl">URL</label>
         <input id="linkUrl" name="url" type="url" maxlength="2048" placeholder="https://" required autocomplete="url">
         <fieldset>
@@ -89,7 +91,7 @@
           <button id="cancelLinkDialog" type="button">Cancel</button>
           <button class="primary-action" type="submit">
             <i class="fa-solid fa-plus" aria-hidden="true"></i>
-            Add link
+            <span id="linkSubmitLabel">Add link</span>
           </button>
         </footer>
       </form>
