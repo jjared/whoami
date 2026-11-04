@@ -123,18 +123,20 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
 
     async function copyText(text) {
         if (!isSecureContext) throw new Error("HTTPS required");
+        const legacyCopied = copyWithLegacyCommand(text);
         if (navigator.clipboard?.writeText) {
             try {
                 await navigator.clipboard.writeText(text);
                 return;
-            } catch {
-                // Fall through when the browser denies clipboard access.
+            } catch (error) {
+                if (legacyCopied) return;
+                throw error;
             }
         }
-        if (!copyWithLegacyCommand(text)) throw new Error("Clipboard unavailable");
+        if (!legacyCopied) throw new Error("Clipboard unavailable");
     }
 
-    function showCopyToast(copied) {
+    function showCopyToast(copied, error) {
         clearTimeout(toastTimer);
         updateCopyToastPosition();
         copyToast.dataset.state = copied ? "success" : "error";
@@ -142,6 +144,8 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
             ? "Copied"
             : !isSecureContext
                 ? "Copy failed: HTTPS required"
+                : error?.name === "NotAllowedError"
+                    ? "Copy failed: browser blocked clipboard access"
                 : "Copy failed";
         copyToast.hidden = false;
         toastTimer = setTimeout(() => {
@@ -165,13 +169,15 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
     async function copyShortlink(key) {
         const text = new URL(`/${key}`, location.origin).href;
         let copied = false;
+        let error;
         try {
             await copyText(text);
             copied = true;
-        } catch {
+        } catch (copyError) {
+            error = copyError;
             copied = false;
         }
-        showCopyToast(copied);
+        showCopyToast(copied, error);
     }
 
     container.addEventListener("pointerdown", event => {
@@ -231,16 +237,25 @@ export function createLinkList(container, addButton, onChange = () => {}, onEdit
         if (!activeWheel || activeWheel.row !== row) {
             cancelWheelSwipe();
             if (scrollLeft < 0) return;
-            activeWheel = { row, key: row.dataset.id, distance: 0 };
+            activeWheel = { row, key: row.dataset.id, distance: 0, copied: false };
         }
         event.preventDefault();
+        if (activeWheel.copied) {
+            clearTimeout(wheelTimer);
+            wheelTimer = setTimeout(() => { activeWheel = null; }, 180);
+            return;
+        }
         activeWheel.distance = Math.max(0, Math.min(COPY_DISTANCE, activeWheel.distance + scrollLeft));
         revealCopy(row, activeWheel.distance);
+        if (activeWheel.distance >= COPY_DISTANCE) {
+            activeWheel.copied = true;
+            clearRowSwipe(row);
+            void copyShortlink(activeWheel.key);
+        }
         clearTimeout(wheelTimer);
-        wheelTimer = setTimeout(async () => {
-            const swipe = activeWheel;
+        wheelTimer = setTimeout(() => {
+            if (activeWheel) clearRowSwipe(activeWheel.row);
             activeWheel = null;
-            await finishCopyGesture(swipe.row, swipe.key, swipe.distance >= COPY_DISTANCE);
         }, 180);
     }, { passive: false });
 
