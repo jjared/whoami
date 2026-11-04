@@ -207,7 +207,6 @@ button#profilePicture:focus-visible {
 }
 
 .link-row {
-    overflow: hidden;
     touch-action: pan-y;
 }
 
